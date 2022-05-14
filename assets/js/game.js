@@ -4,26 +4,42 @@
 //    *Defeat each enemy robot
 // "LOSE" - Player robot's health is zero or less
 
+var fightOrSkip = function() {
+    // ask player if they'd like to fight or skip using the fightOrSkip function
+    var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.");
+    promptFight = promptFight.toLowerCase();
+
+    // Conditional rucursive function call
+    if(promptFight === "" || promptFight === null) {
+        window.alert("You need to provide a valid answer! Please try again.");
+        return fightOrSkip();
+    }
+
+    // if player picks "skip" confirm and then stop the loop
+    if (promptFight === "skip") {
+        // confirm skip
+        var confirmSkip = window.confirm("Are you sure you'd like to quit?");
+
+        // if yes (true), leave fight
+        if (confirmSkip) {
+            window.alert(playerInfo.name + " has chosen to skip the fight!");
+            //subtract money from playerInfo.money for skipping
+            playerInfo.money = Math.max(0, playerInfo.money - 10);
+            
+            // return true if a player wants to skip
+            return true;
+        }
+    }
+    return false;
+};
 
 var fight = function(enemy) {
 
     while (playerInfo.health > 0 && enemy.health > 0) {
-        // ask player if they'd like to fight or run
-        var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.");
-
-        // if player picks "skip" confirm and then stop the loop
-        if (promptFight === "skip" || promptFight === "SKIP") {
-            // confirm skip
-            var confirmSkip = window.confirm("Are you sure you'd like to quit?");
-
-            // if yes (true), leave fight
-            if (confirmSkip) {
-            window.alert(playerInfo.name + " has chosen to skip the fight!");
-            //subtract money from playerInfo.money for skipping
-            playerInfo.money = Math.max(0, playerInfo.money - 10);
-            console.log("playerInfo.money", playerInfo.money);
+        // ask player if they'd like to leave using the fightOrSkip function
+        if (fightOrSkip()) {
+            // if true leave fight by breaking the loop
             break;
-            }
         }
 
         // generate random damage based on player's attack power
